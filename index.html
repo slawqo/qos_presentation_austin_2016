@@ -16,11 +16,96 @@ class: center, middle
 
 # Agenda
 
-1. ...
+1. The RBAC functionality in Mitaka
+2. QoS in Liberty - reminder
+3. Bandwidth limit for Linuxbridge agent
+4. DSCP functionality in Neuton
+5. The possibilities for the future.
+
+---
+class: center
+
+# QoS in Liberty
+
+## Egress bandwidth limit for:
+
+* Openvswitch L2 agent
+* SR-IOV L2 agent
+
+???
+
+In Liberty:
+* QoS only with one rule type: egress traffic limiting
+* implementation only for ovs and SR-IOV L2 agents.
+
+---
+class: center
+
+# Egress bandwidth limit rule:
+
+1. Create policy
+```
+    neutron qos-policy-create example-policy
+```
+2. Create bandwidth limit rule:
+```
+    neutron qos-bandwidth-limit-rule-create \
+        --max-kbps 512 \
+        --max-burst 1024 \
+        example-policy
+```
+3. Apply policy for port/network
+```
+    neutron port-update 071e54ad-d5f5-402f-933f-dece0db3afde \
+        --qos-policy example-policy
+```
+
+???
+
+Create bandwith limit (EGRESS) require steps like on slide.
+
+---
+name: qos_bw_limit_ovs
+class: center
+
+# Apply egress bandwidth limit rule in Openvswitch agent
+
+```
+ovs-vsctl set Interface qvo071e54ad-d5 ingress_policing_rate=512
+ovs-vsctl set Interface qvo071e54ad-d5 ingress_policing_burst=1024
+```
+
+???
+In Liberty BW Limit rule could be applied by Openvswitch and SR-IOV agent.
+Example: OVS agent makes it like on slide
 
 ---
 
-# Introduction
+# Egress bandwidth limit in Mitaka
+
+support for linuxbridge l2 agent
+
+---
+
+# Implementation details:
+
+---
+
+# Example with Linuxbridge agent:
+
+---
+
+# New config options for Linuxbridge agent:
+
+* kernel_hz value
+* latency for tc
+
+---
+
+# Side effect:
+
+Support for l2 extension drivers in linuxbridge agent (qos is first such
+extension for linuxbridge agent)
 
     </textarea>
     <script src="remark-latest.min.js">
