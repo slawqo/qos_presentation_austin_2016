@@ -71,9 +71,12 @@ class: center
 # Apply egress bandwidth limit rule in Openvswitch agent
 
 ```
-ovs-vsctl set Interface qvo071e54ad-d5 ingress_policing_rate=512
-ovs-vsctl set Interface qvo071e54ad-d5 ingress_policing_burst=1024
+ovs-vsctl set Interface tap1 ingress_policing_rate=512
+ovs-vsctl set Interface tap1 ingress_policing_burst=1024
 ```
+
+![OVS Bridge connection](images/OVS_Bridge_connection.png)]
+
 
 ???
 In Liberty BW Limit rule could be applied by Openvswitch and SR-IOV agent.
