@@ -101,7 +101,27 @@ Implementation details on next slide...
 
 ---
 
-# Implementation details:
+name: qos_linuxbridge_details_1
+class: center
+
+# Linuxbridge agent details
+
+* Linuxbridge agent use tc (traffic control) Linux tool
+* policing on ingress qdisc (queueing discipline)
+* Token Bucket Filter used on ingress qdisc
+
+![Egress traffic explanation](images/Egress_traffic.png)
+
+???
+- Using basic Linux tool tc to apply qos rules
+- qdisc is short for 'queueing discipline' and it is elementary to under-
+  standing traffic control. Whenever the kernel needs to send a packet to
+  an  interface,  it  is enqueued to the qdisc configured for that inter-
+  face. Immediately afterwards, the kernel tries to get as  many  packets
+  as  possible  from  the  qdisc,  for giving them to the network adaptor
+  driver. (from tc manpage)
+- using ingress qdisc because it is treated from bridge POV. So from VM it will
+  be egress traffic
 
 ---
 

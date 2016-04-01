@@ -21,8 +21,15 @@ ul li, ol li {
 
 #slide-qos_bw_limit_ovs img {
     width: 40%;
+    margin-top: 20px;
 }
 
 #slide-qos_linuxbridge_support_1 img {
     width: 60%;
+    margin-top: 20px;
+}
+
+#slide-qos_linuxbridge_details_1 img {
+    width: 60%;
+    margin-top: 20px;
 }
