@@ -45,19 +45,19 @@ class: center
 
 1. Create policy
 ```
-    neutron qos-policy-create example-policy
+neutron qos-policy-create example-policy
 ```
 2. Create bandwidth limit rule:
 ```
-    neutron qos-bandwidth-limit-rule-create \
-        --max-kbps 512 \
-        --max-burst 1024 \
-        example-policy
+neutron qos-bandwidth-limit-rule-create \
+    --max-kbps 512 \
+    --max-burst 1024 \
+    example-policy
 ```
 3. Apply policy for port/network
 ```
-    neutron port-update 071e54ad-d5f5-402f-933f-dece0db3afde \
-        --qos-policy example-policy
+neutron port-update 071e54ad-d5f5-402f-933f-dece0db3afde \
+    --qos-policy example-policy
 ```
 
 ???
