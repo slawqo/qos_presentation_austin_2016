@@ -33,3 +33,13 @@ ul li, ol li {
     width: 60%;
     margin-top: 20px;
 }
+
+#slide-qos_linuxbridge_details_2 pre {
+    text-align: left;
+}
+
+#slide-qos_linuxbridge_details_2 p {
+    text-align: left;
+    margin-left: 15%;
+}
+
