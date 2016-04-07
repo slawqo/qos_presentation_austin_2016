@@ -140,8 +140,8 @@ neutron qos-bandwidth-limit-rule-create \
 
 ```
 tc qdisc add dev tap ingress handle ffff:
-tc filter add dev tap parent ffff: protocol all u32 match u32 0 0 police \
-    rate 512kbit burst 1024kbit drop flowid :1
+tc filter add dev tap parent ffff: protocol all prio 49 basic police \
+    rate 512kbit burst 1024kbit mtu 65535 drop
 ```
 
 ???
@@ -213,8 +213,8 @@ Two new config options for LB agent added for QoS extension:
 
 # Side effect:
 
-Support for l2 extension drivers in linuxbridge agent (qos is first such
-extension for linuxbridge agent)
+* L2 extension drivers in LinuxBridge agent
+* Fullstack tests for LinuxBridge agent
 
     </textarea>
     <script src="remark-latest.min.js">
