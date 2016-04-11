@@ -6,13 +6,34 @@ body { font-family: 'Droid Serif'; }
 h1, h2, h3 {
   font-family: 'Yanone Kaffeesatz';
   font-weight: normal;
+  color: #00989e;
 }
 .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+
+.remark-slide-number {
+    bottom: 20px;
+}
 
 ul li, ol li {
     text-align: left;
     font-size: 26px;
     margin-top: 15px;
+}
+
+.remark-slide-content {
+    border-bottom: 18px solid #00989e;
+    display: table-cell;
+    font-size: 24px;
+    padding: 0 6em;
+    vertical-align: middle;
+}
+
+.remark-code-line {
+    background-color: #000;
+    border: 1px solid #000;
+    color: #fff;
+    padding: 0 1em;
+    white-space: normal;
 }
 
 #slide-qos_bw_limit_ovs pre {
