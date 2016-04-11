@@ -29,11 +29,11 @@ ul li, ol li {
 }
 
 .remark-code-line {
+    text-align: left;
     background-color: #000;
     border: 1px solid #000;
     color: #fff;
     padding: 0 1em;
-    white-space: normal;
 }
 
 #slide-qos_bw_limit_ovs pre {
