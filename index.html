@@ -125,6 +125,35 @@ class: center
 
 ---
 
+name: qos_how_tc_tbf_works
+class: center
+
+# How TBF qdisc works
+
+![how tbf works](images/how_tbf_works.png)  
+source: http://unix.stackexchange.com/a/100797
+
+???
+A "bucket" is a metaphorical object. Its key properties are that it can hold
+tokens, and that the number of tokens it can hold is limited. If it overflows,
+extra tokens are lost (just like trying to put too much water in an actual
+bucket). __The size of the bucket is called burst__.
+
+In order to actually transmit a packet onto the network, that packet must obtain
+tokens equal to its size in bytes or mpu (whichever is larger).
+
+There is (or can be) a line (queue) of packets waiting for tokens. This occurs
+when the bucket is empty, or alternatively has fewer tokens than the size of the
+packet. "Length" of this _sidewalk_ can be set indirectly with latency parameter
+or directly in bytes.
+
+When the kernel wants to send a packet out the filtered interface, it attempts
+to place the packet at the end of the line. If there isn't any room on the
+sidewalk, that's unfortunate for the packet, because at the end of the sidewalk
+is a bottomless pit, and the kernel drops the packet.
+
+---
+
 name: qos_linuxbridge_details_2
 class: center
 
@@ -153,35 +182,6 @@ qdisc for interface and then apply filter rule on it to police rate and burst
 values. Filter rule can match only some packets but we want (for now) to apply
 it for all traffic incoming to tap interface (outgoing from VM)
 For ingress qdisc TBF is used. On next slide I will show how tbf is working.
-
----
-
-name: qos_how_tc_tbf_works
-class: center
-
-# How TBF qdisc works
-
-![how tbf works](images/how_tbf_works.png)  
-source: http://unix.stackexchange.com/a/100797
-
-???
-A "bucket" is a metaphorical object. Its key properties are that it can hold
-tokens, and that the number of tokens it can hold is limited. If it overflows,
-extra tokens are lost (just like trying to put too much water in an actual
-bucket). __The size of the bucket is called burst__.
-
-In order to actually transmit a packet onto the network, that packet must obtain
-tokens equal to its size in bytes or mpu (whichever is larger).
-
-There is (or can be) a line (queue) of packets waiting for tokens. This occurs
-when the bucket is empty, or alternatively has fewer tokens than the size of the
-packet. "Length" of this _sidewalk_ can be set indirectly with latency parameter
-or directly in bytes.
-
-When the kernel wants to send a packet out the filtered interface, it attempts
-to place the packet at the end of the line. If there isn't any room on the
-sidewalk, that's unfortunate for the packet, because at the end of the sidewalk
-is a bottomless pit, and the kernel drops the packet.
 
 ---
 
