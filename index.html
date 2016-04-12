@@ -45,22 +45,17 @@ class: center
 # Egress bandwidth limit rule:
 
 1. Create policy
-
 ```bash
 neutron qos-policy-create example-policy
 ```
-
 2. Create bandwidth limit rule:
-
 ```bash
 neutron qos-bandwidth-limit-rule-create \
     --max-kbps 512 \
     --max-burst 1024 \
     example-policy
 ```
-
 3. Apply policy for port/network
-
 ```bash
 neutron port-update 071e54ad-d5f5-402f-933f-dece0db3afde \
     --qos-policy example-policy
@@ -95,7 +90,7 @@ class: center
 
 # Egress bandwidth limit in Mitaka
 
-## support for linuxbridge l2 agent
+## support for LinuxBridge l2 agent
 
 ![Linuxbridge agent support arrived](images/Agent-arrived.jpg)
 
@@ -110,9 +105,9 @@ Implementation details on next slide...
 name: qos_linuxbridge_details_1
 class: center
 
-# Linuxbridge agent details
+# Qos in LinuxBridge agent in details
 
-* Linuxbridge agent use tc (traffic control) Linux tool
+* LinuxBridge agent use tc (traffic control) Linux tool
 * policing on ingress qdisc (queueing discipline)
 * Token Bucket Filter used on ingress qdisc
 
@@ -163,7 +158,7 @@ is a bottomless pit, and the kernel drops the packet.
 name: qos_linuxbridge_details_2
 class: center
 
-# Example with Linuxbridge agent:
+# Example with LinuxBridge agent:
 
 ```bash
 neutron qos-bandwidth-limit-rule-create \
