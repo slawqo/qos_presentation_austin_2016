@@ -191,32 +191,6 @@ For ingress qdisc TBF is used. On next slide I will show how tbf is working.
 
 ---
 
-name: qos_lb_config_options
-class: center
-
-# New config options for Linuxbridge agent:
-
-* kernel_hz value
-
-### How to calculate minimum burst value?
-![how to calculate burst](images/how_to_calculate_burst.png)
-
-* tbf_latency
-
-???
-
-Two new config options for LB agent added for QoS extension:
-* kernel HZ value is required for calculate min burst value (this bucket size
-  from previous slide) for tbf qdisc. If user will set bigger value then this min
-  then user's value will be set otherwise this calculated value will be set to
-  ensure proper working of TC limit.
-* tbf_latency is required for tbf qdisc configuration. It's "sidewalk" lenght
-  from one of previous slides
-  (but it's more necessary for ingress traffic limit which will be implemented
-  later)
-
----
-
 # Side effect:
 
 * L2 extension drivers in LinuxBridge agent
