@@ -18,7 +18,7 @@ class: center, middle
 
 1. The RBAC functionality in Mitaka
 2. QoS in Liberty - reminder
-3. Bandwidth limit for Linuxbridge agent
+3. Bandwidth limit for LinuxBridge agent
 4. DSCP functionality in Neuton
 5. The possibilities for the future.
 
@@ -37,6 +37,8 @@ class: center
 In Liberty:
 * QoS only with one rule type: egress traffic limiting
 * implementation only for ovs and SR-IOV L2 agents.
+
+Missing support for _LinuxBridge_ agent.
 
 ---
 
@@ -90,13 +92,13 @@ class: center
 
 # Egress bandwidth limit in Mitaka
 
-## support for LinuxBridge l2 agent
+## support for LinuxBridge L2 agent
 
 ![Linuxbridge agent support arrived](images/Agent-arrived.jpg)
 
 
 ???
-In Mitaka support for egress bw limit for linuxbridge agent.
+In Mitaka support for egress bw limit for LinuxBridge agent.
 From user POV same as for OVS agent (policy, rule, apply rule to port/network)
 Implementation details on next slide...
 
@@ -105,7 +107,7 @@ Implementation details on next slide...
 name: qos_linuxbridge_details_1
 class: center
 
-# Qos in LinuxBridge agent in details
+# QoS in LinuxBridge agent in details
 
 * LinuxBridge agent use tc (traffic control) Linux tool
 * policing on ingress qdisc (queueing discipline)
