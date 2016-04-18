@@ -23,6 +23,7 @@ class: center, middle
 5. The possibilities for the future.
 
 ---
+name: qos_in_liberty
 class: center
 
 # QoS in Liberty
@@ -37,8 +38,8 @@ class: center
 In Liberty:
 * QoS only with one rule type: egress traffic limiting
 * implementation only for ovs and SR-IOV L2 agents.
-
-Missing support for _LinuxBridge_ agent.
+* Missing support for _LinuxBridge_ agent.
+* Implementation done as L2 extension drivers - new mechanism in Liberty
 
 ---
 
@@ -65,7 +66,7 @@ neutron port-update 071e54ad-d5f5-402f-933f-dece0db3afde \
 
 ???
 
-Create bandwith limit (EGRESS) require steps like on slide.
+__Ask how many people know already QoS.__
 
 ---
 name: qos_bw_limit_ovs
@@ -82,8 +83,11 @@ ovs-vsctl set Interface tap1 ingress_policing_burst=1024
 
 
 ???
-In Liberty BW Limit rule could be applied by Openvswitch and SR-IOV agent.
-Example: OVS agent makes it like on slide
+* On this picture You can see how VM is connected to network using OVS bridge. OVS
+  L2 agent will apply bw limit from previous slide in two simple commands…
+* After those commands bw_limit for port is immediatelly applied and works. Egress
+  traffic is limited to configured limit \o/
+* Underneath ovs using TC to apply this ingress policing rules
 
 ---
 
@@ -98,9 +102,9 @@ class: center
 
 
 ???
-In Mitaka support for egress bw limit for LinuxBridge agent.
-From user POV same as for OVS agent (policy, rule, apply rule to port/network)
-Implementation details on next slide...
+And now in Mitaka support for QoS bw limit arrived to next agent :) __It is
+supported also by Linuxbridge agent.__  
+Implementations details on next slides...
 
 ---
 
@@ -111,7 +115,6 @@ class: center
 
 * LinuxBridge agent use tc (traffic control) Linux tool
 * policing on ingress qdisc (queueing discipline)
-* Token Bucket Filter used on ingress qdisc
 
 ![Egress traffic explanation](images/Egress_traffic.png)
 
@@ -123,8 +126,7 @@ class: center
   face. Immediately afterwards, the kernel tries to get as  many  packets
   as  possible  from  the  qdisc,  for giving them to the network adaptor
   driver. (from tc manpage)
-- using ingress qdisc because it is treated from bridge POV. So from VM it will
-  be egress traffic
+- confusing POV
 
 ---
 
@@ -137,23 +139,24 @@ class: center
 source: http://unix.stackexchange.com/a/100797
 
 ???
-A "bucket" is a metaphorical object. Its key properties are that it can hold
-tokens, and that the number of tokens it can hold is limited. If it overflows,
-extra tokens are lost (just like trying to put too much water in an actual
-bucket). __The size of the bucket is called burst__.
+TC for Ingress qdisc policing is using __TBF__
 
-In order to actually transmit a packet onto the network, that packet must obtain
-tokens equal to its size in bytes or mpu (whichever is larger).
+- There is metaphorical object called "bucket". Its key properties are that it can
+  hold tokens, and that number of those tokens is limited. If it overflows, extra
+  tokens are lost (just like trying to put too much water in an actual bucket).
+- The size of the bucket is called burst.
+- Tokens are produced by kernel in every tick of CPU.
+- When kernel wants to send packets to network, packets are enqueue in packet
+  queue (qdisc). "Length" of this _sidewalk_ can be set indirectly with latency
+  parameter or directly in bytes. If there isn't any place in this line then new
+  packets are simply dropped.
+- In order to actually transmit a packet onto the network, that packet must
+  obtain tokens equal to its size in bytes or mpu (whichever is larger).
 
-There is (or can be) a line (queue) of packets waiting for tokens. This occurs
-when the bucket is empty, or alternatively has fewer tokens than the size of the
-packet. "Length" of this _sidewalk_ can be set indirectly with latency parameter
-or directly in bytes.
-
-When the kernel wants to send a packet out the filtered interface, it attempts
-to place the packet at the end of the line. If there isn't any room on the
-sidewalk, that's unfortunate for the packet, because at the end of the sidewalk
-is a bottomless pit, and the kernel drops the packet.
+__Important setting here is value of burst. If it will be set too low then
+confgiured bw limit will not be reached. If it will be too high, too many
+packets will be send too network without limit (will got tokens) so bw limit can
+be higher than expected.__
 
 ---
 
@@ -178,13 +181,32 @@ tc filter add dev tap parent ffff: protocol all prio 49 basic\
 
 ???
 
-So for example from slide about OVS such rule created on
-LB agent will be applied with tc command with commands like shown on slide.
-There are at least 3 commands to create limit because we need to create ingress
-qdisc for interface and then apply filter rule on it to police rate and burst
-values. Filter rule can match only some packets but we want (for now) to apply
-it for all traffic incoming to tap interface (outgoing from VM)
-For ingress qdisc TBF is used. On next slide I will show how tbf is working.
+* BW limit rule configured and applied before by ovs agent can now be applied by
+  linuxbrige agent which will do it by executing on host 2 TC commands (on slide)
+* LinuxBridge agent is „talking” directly to TC because LB don’t have any
+  mechanism similar to rate_limit which is in OVS.
+* In fact it makes exactly same TC command as Openvswitch is doing so at the end
+  limits are applied in exactly same way for both L2 agents.
+* MTU value here is the maximum packet size handled by the policer. Larger ones
+  will be handled like they exceeded the configured rate, so will be dropped in
+  our case.
+
+---
+name: qos_in_mitaka
+class: center
+
+# QoS in Mitaka
+
+## Egress bandwidth limit for:
+
+* Openvswitch L2 agent
+* SR-IOV L2 agent
+* __LinuxBridge L2 agent__
+
+???
+
+Finally in Mitaka all 3 main L2 agents from ML2 plugin supports Egress bw limit
+rule from QoS \o/
 
 ---
 
