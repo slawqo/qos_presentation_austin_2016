@@ -12,15 +12,36 @@ class: center, middle
 
 # Neutron Quality of Service, new features and future roadmap
 
+.presenters[
+* Miguel Ángel Ajo<br/> majopela@redhat.com
+* Slaweq Kaplonski <br/> slawomir.kaplonski@ovh.net
+* Victor Howard <br/> victor_howard@cable.comcast.com
+]
 ---
 
 # Agenda
 
-1. The RBAC functionality in Mitaka
-2. QoS in Liberty - reminder
-3. Bandwidth limit for LinuxBridge agent
-4. DSCP functionality in Neuton
-5. The possibilities for the future.
+1. QoS in Liberty - reminder
+2. Mitaka: Bandwidth limit for LinuxBridge
+2. Mitaka: The RBAC functionality
+4. Newton: DSCP functionality
+5. Newton and beyond
+
+---
+name: qos_in_liberty_pre
+class: center
+
+# QoS in Liberty
+
+.left[
+In the Liberty design summit, a model to provide
+quality of service in a gerneric way was proposed.
+
+ * image goes here
+
+The foundation was implemented during the QoS
+coding sprint.
+]
 
 ---
 name: qos_in_liberty
@@ -30,7 +51,7 @@ class: center
 
 ## Egress bandwidth limit for:
 
-* Openvswitch L2 agent
+* Open vSwitch L2 agent
 * SR-IOV L2 agent
 
 ???
@@ -39,7 +60,7 @@ In Liberty:
 * QoS only with one rule type: egress traffic limiting
 * implementation only for ovs and SR-IOV L2 agents.
 * Missing support for _LinuxBridge_ agent.
-* Implementation done as L2 extension drivers - new mechanism in Liberty
+* Implementation done  as L2 extension drivers - new mechanism in Liberty
 
 ---
 
@@ -214,6 +235,41 @@ rule from QoS \o/
 
 * L2 extension drivers in LinuxBridge agent
 * Fullstack tests for LinuxBridge agent
+
+---
+
+name: rbac_in_mitaka
+# Role Based Access Control (RBAC)
+
+In the Liberty release, policies could be shared
+to all projects (tenants).
+
+```bash
+neutron qos-policy-create shared-policy --shared
+```
+In *Mitaka*, thanks to RBAC integration, QoS policies
+can be shared to specific projects.
+
+
+```bash
+neutron qos-policy-create the-policy
+neutron rbac-create --target-tenant <project-uuid> \
+                    --action access_as_shared \
+                    --type qos-policy <policy-uuid>
+```
+
+
+???
+
+Talk about how policy.json works, and how operators
+can modify that to allow non-administrator creating
+and sharing policies too.
+
+---
+
+# DSCP placeholder
+
+
 
     </textarea>
     <script src="remark-latest.min.js">

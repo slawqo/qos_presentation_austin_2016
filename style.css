@@ -49,6 +49,10 @@ ul li, ol li {
     padding: 0 1em;
 }
 
+.presenters {
+    color: #70989e;
+}
+
 #slide-qos_in_liberty h2 {
     text-align: left;
 }
