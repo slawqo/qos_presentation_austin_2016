@@ -62,7 +62,7 @@ ul li, ol li {
 }
 
 #slide-qos_bw_limit_ovs img {
-    width: 40%;
+    width: 30%;
     margin-top: 20px;
 }
 
@@ -87,7 +87,7 @@ ul li, ol li {
 
 
 #slide-qos_how_tc_tbf_works img {
-    width: 100%;
+    width: 70%;
     margin-top: 20px;
 }
 #slide-qos_how_tc_tbf_works p {

@@ -74,15 +74,14 @@ neutron qos-policy-create example-policy
 ```
 2. Create bandwidth limit rule:
 ```bash
-neutron qos-bandwidth-limit-rule-create \
-    --max-kbps 512 \
-    --max-burst 1024 \
-    example-policy
+neutron qos-bandwidth-limit-rule-create --max-kbps 512 \
+                                            --max-burst 1024 \
+                                            example-policy
 ```
 3. Apply policy for port/network
 ```bash
 neutron port-update 071e54ad-d5f5-402f-933f-dece0db3afde \
-    --qos-policy example-policy
+                        --qos-policy example-policy
 ```
 
 ???
@@ -156,7 +155,7 @@ class: center
 
 # How TBF qdisc works
 
-![how tbf works](images/how_tbf_works.png)  
+![how tbf works](images/how_tbf_works.png)
 source: http://unix.stackexchange.com/a/100797
 
 ???
@@ -187,10 +186,9 @@ class: center
 # Example with LinuxBridge agent:
 
 ```bash
-neutron qos-bandwidth-limit-rule-create \
-    --max-kbps 512 \
-    --max-burst 1024 \
-    example-policy
+neutron qos-bandwidth-limit-rule-create --max-kbps 512 \
+                                        --max-burst 1024 \
+                                        example-policy
 ```
 ![arrow down](images/down_arrow.png)
 
@@ -253,8 +251,7 @@ can be shared to specific projects.
 
 ```bash
 neutron qos-policy-create the-policy
-neutron rbac-create --target-tenant <project-uuid> \
-                    --action access_as_shared \
+neutron rbac-create --target-tenant <project-uuid> --action access_as_shared \
                     --type qos-policy <policy-uuid>
 ```
 
@@ -275,7 +272,7 @@ and sharing policies too.
     <script src="remark-latest.min.js">
     </script>
     <script>
-      var slideshow = remark.create();
+        var slideshow = remark.create({ratio: '16:9'});
     </script>
   </body>
 </html>
