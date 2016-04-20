@@ -8,7 +8,9 @@ h1, h2, h3 {
   font-weight: normal;
   color: #00989e;
 }
-.remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+.remark-code, .remark-inline-code {
+    font-family: 'Ubuntu Mono';
+}
 
 .remark-slide-number {
     bottom: 20px;
@@ -19,7 +21,7 @@ h1, h2, h3 {
     font-size: 16px;
     margin-top: auto;
 }
-    
+
 /* Notes for next slide */
 .remark-notes-preview p, .remark-notes-preview ul li, .remark-notes-preview ol li {
     text-align: left;
@@ -34,7 +36,7 @@ ul li, ol li {
 }
 
 .remark-slide-content {
-    border-bottom: 18px solid #00989e;
+    background-image: url("images/background_summit.svg");
     display: table-cell;
     font-size: 24px;
     padding: 0 6em;
@@ -66,12 +68,12 @@ ul li, ol li {
 }
 
 #slide-qos_linuxbridge_support_1 img {
-    width: 60%;
+    width: 50%;
     margin-top: 20px;
 }
 
 #slide-qos_linuxbridge_details_1 img {
-    width: 60%;
+    width: 50%;
     margin-top: 20px;
 }
 
@@ -86,8 +88,7 @@ ul li, ol li {
 
 
 #slide-qos_how_tc_tbf_works img {
-    width: 70%;
-    margin-top: 20px;
+    width: 60%;
 }
 #slide-qos_how_tc_tbf_works p {
     font-size: 12px;
