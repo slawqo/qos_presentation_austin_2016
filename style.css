@@ -40,7 +40,12 @@ ul li, ol li {
     display: table-cell;
     font-size: 24px;
     padding: 0 6em;
+    padding-bottom: 2em;
     vertical-align: middle;
+}
+
+.remark-slide-content a {
+    color: #5098fe;
 }
 
 .remark-code-line {
@@ -92,4 +97,18 @@ ul li, ol li {
 }
 #slide-qos_how_tc_tbf_works p {
     font-size: 12px;
+}
+
+#slide-bandwidth-scheduling-1 img,
+#slide-bandwidth-scheduling-2 img,
+#slide-bandwidth-scheduling-3 img,
+#slide-bandwidth-scheduling-3b img,
+#slide-bandwidth-scheduling-4 img,
+#slide-bandwidth-scheduling-5 img,
+#slide-bandwidth-scheduling-6 img { margin-left: 15%; width: 60%; }
+
+#graph-min-bw-best-eff {
+    margin-left:10%;
+    width: 30em;
+    height: 15em;
 }

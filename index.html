@@ -266,13 +266,165 @@ and sharing policies too.
 
 # DSCP placeholder
 
+---
+
+# Newton and beyond (rfe-approved)
+
+RFEs: http://bit.ly/neutron-qos-rfes-approved
+
+* DSCP marking rules (L3 marking)
+* Ingress bandwidth limiting
+
+???
+Explain what an RFE is: use case proposal, high level.
+
+---
+
+# Newton and beyond (RFEs on flight)
+
+RFEs: http://bit.ly/neutron-qos-rfes
+
+* Minimum bandwidth support (egress)
+  1. In host (Best effort)
+  2. Scheduling aware (Strict)
+
+* Traffic classification
+* Rate limit external connectivity traffic
+* VLAN 802.1p support (L2 Marking)
+* ECN integration
+
+---
+# Newton rfe: Minimum bandwidth (egress)
+
+  <div id="graph-min-bw-best-eff"></div>
+
+---
+
+name: bandwidth-scheduling-1
+
+# Newton rfe: Minimum bandwidth (egress)
+  Strict bandwidth guarantee: scheduling aware
+
+![Bandwidth Guarantees 1](images/band-guarantees-sched-1.svg)
+
+---
+
+name: bandwidth-scheduling-2
+
+# Newton rfe: Minimum bandwidth (egress)
+  Strict bandwidth guarantee: scheduling aware
+
+![Bandwidth Guarantees 2](images/band-guarantees-sched-2.svg)
+
+---
+
+name: bandwidth-scheduling-3
+
+# Newton rfe: Minimum bandwidth (egress)
+  Strict bandwidth guarantee: scheduling aware
+
+![Bandwidth Guarantees 3](images/band-guarantees-sched-3.svg)
+
+---
+
+name: bandwidth-scheduling-3b
+
+# Newton rfe: Minimum bandwidth (egress)
+  Strict bandwidth guarantee: scheduling aware
+
+![Bandwidth Guarantees 3b](images/band-guarantees-sched-3b.svg)
+
+---
+
+name: bandwidth-scheduling-4
+
+# Newton rfe: Minimum bandwidth (egress)
+  Strict bandwidth guarantee: scheduling aware
+
+![Bandwidth Guarantees 4](images/band-guarantees-sched-4.svg)
+
+---
+
+name: bandwidth-scheduling-5
+
+# Newton rfe: Minimum bandwidth (egress)
+  Strict bandwidth guarantee: scheduling aware
+
+![Bandwidth Guarantees 5](images/band-guarantees-sched-5.svg)
+
+---
+
+name: bandwidth-scheduling-6
+
+# Newton rfe: Minimum bandwidth (egress)
+  Strict bandwidth guarantee: scheduling aware
+
+![Bandwidth Guarantees 6](images/band-guarantees-sched-6.svg)
+
+---
+
+name: bandwidth-scheduling
+
+# Newton rfe: Minimum bandwidth (egress)
+   Strict bandwidth guarantee: integration with nova generic resource pools.
+
+---
+# Questions?
+
+.presenters[
+* Miguel Ángel Ajo<br/> majopela@redhat.com
+* Slaweq Kaplonski <br/> slawomir.kaplonski@ovh.net
+* Victor Howard <br/> victor_howard@cable.comcast.com
+]
 
 
     </textarea>
     <script src="remark-latest.min.js">
     </script>
     <script>
-        var slideshow = remark.create({ratio: '16:9'});
+        var slideshow = remark.create({ratio: '16:9',
+                                       countIncrementalSlides: false});
     </script>
+
+    <script src="plotly-latest.min.js"></script>
+    <script>
+
+
+
+     var port_a = {
+              x: [ 'start','no-policy','min-policy-of-8Gb-on-a',],
+              y: [ '9.9', '5', '8'],
+              name: 'port-a',
+              type: 'bar',
+              marker: {
+                  color: '#00989e'
+              }
+
+             };
+
+    var port_b = {
+              x: [ 'start','no-policy','min-policy-of-8Gb-on-a',],
+              y: [ '0.1','5','2',],
+              name: 'port-b',
+              type: 'bar',
+              marker: {
+                  color: '#BF3330'
+              }
+             };
+
+    var options = {staticPlot: true,
+                   showLink: false,
+                   displayLogo: false};
+
+    Plotly.newPlot('graph-min-bw-best-eff',
+            [ port_a, port_b ],
+            { yaxis: { title: 'Bandwidth Gb'},
+              title: 'In host minimum bandwidth guarantee',
+              margin: { b: 20, t:40 },
+              barmode: 'group',
+              hovermode:'closest',
+              }, options);
+    </script>
+
   </body>
 </html>
