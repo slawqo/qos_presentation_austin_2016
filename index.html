@@ -75,7 +75,7 @@ neutron qos-policy-create example-policy
 2. Create bandwidth limit rule:
 ```bash
 neutron qos-bandwidth-limit-rule-create --max-kbps 512 \
-                                            --max-burst 1024 \
+                                            --max-burst-kbps 1024 \
                                             example-policy
 ```
 3. Apply policy for port/network
@@ -187,7 +187,7 @@ class: center
 
 ```bash
 neutron qos-bandwidth-limit-rule-create --max-kbps 512 \
-                                        --max-burst 1024 \
+                                        --max-burst-kbps 1024 \
                                         example-policy
 ```
 ![arrow down](images/down_arrow.png)
