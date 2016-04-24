@@ -56,7 +56,7 @@ class: center
 
 ???
 
-In Liberty:
+To say:
 * QoS only with one rule type: egress traffic limiting
 * implementation only for ovs and SR-IOV L2 agents.
 * Missing support for _LinuxBridge_ agent.
@@ -88,6 +88,8 @@ neutron port-update 071e54ad-d5f5-402f-933f-dece0db3afde \
 
 __Ask how many people know already QoS.__
 
+Short remind. How QoS works in Neutron. If You want to configure bw...
+
 ---
 name: qos_bw_limit_ovs
 class: center
@@ -103,11 +105,10 @@ ovs-vsctl set Interface tap1 ingress_policing_burst=1024
 
 
 ???
-* On this picture You can see how VM is connected to network using OVS bridge. OVS
-  L2 agent will apply bw limit from previous slide in two simple commands…
-* After those commands bw_limit for port is immediatelly applied and works. Egress
-  traffic is limited to configured limit \o/
-* Underneath ovs using TC to apply this ingress policing rules
+On this picture You can see how VM is connected to network using OVS bridge.
+OVS L2 agent will apply bw limit from previous slide in two simple commands…
+
+Underneath ovs using TC to apply this ingress policing rules....
 
 ---
 
@@ -122,9 +123,8 @@ class: center
 
 
 ???
-And now in Mitaka support for QoS bw limit arrived to next agent :) __It is
-supported also by Linuxbridge agent.__  
-Implementations details on next slides...
+__And now here it comes.__ In Mitaka we provided support for QoS bw limit also
+in LB agent...
 
 ---
 
@@ -139,14 +139,14 @@ class: center
 ![Egress traffic explanation](images/Egress_traffic.png)
 
 ???
-- Using basic Linux tool tc to apply qos rules
-- qdisc is short for 'queueing discipline' and it is elementary to under-
-  standing traffic control. Whenever the kernel needs to send a packet to
-  an  interface,  it  is enqueued to the qdisc configured for that inter-
-  face. Immediately afterwards, the kernel tries to get as  many  packets
-  as  possible  from  the  qdisc,  for giving them to the network adaptor
-  driver. (from tc manpage)
-- confusing POV
+qdisc is short for 'queueing discipline' and it is elementary to under-
+standing traffic control. Whenever the kernel needs to send a packet to
+an  interface,  it  is enqueued to the qdisc configured for that inter-
+face. Immediately afterwards, the kernel tries to get as  many  packets
+as  possible  from  the  qdisc,  for giving them to the network adaptor
+driver. (from tc manpage)
+
+__Tell about confusing thing here__
 
 ---
 
@@ -159,24 +159,17 @@ class: center
 source: http://unix.stackexchange.com/a/100797
 
 ???
-TC for Ingress qdisc policing is using __TBF__
-
-- There is metaphorical object called "bucket". Its key properties are that it can
-  hold tokens, and that number of those tokens is limited. If it overflows, extra
-  tokens are lost (just like trying to put too much water in an actual bucket).
+- There is metaphorical object called "bucket". Extra
+  tokens are lost.
 - The size of the bucket is called burst.
-- Tokens are produced by kernel in every tick of CPU.
 - When kernel wants to send packets to network, packets are enqueue in packet
-  queue (qdisc). "Length" of this _sidewalk_ can be set indirectly with latency
-  parameter or directly in bytes. If there isn't any place in this line then new
-  packets are simply dropped.
+  queue (qdisc).
 - In order to actually transmit a packet onto the network, that packet must
   obtain tokens equal to its size in bytes or mpu (whichever is larger).
 
-__Important setting here is value of burst. If it will be set too low then
-confgiured bw limit will not be reached. If it will be too high, too many
-packets will be send too network without limit (will got tokens) so bw limit can
-be higher than expected.__
+__Important setting here is value of burst:__
+* too low - configured bw limit will not be reached
+* too high - too many packets will have tokens and bw_limit higher than expected
 
 ---
 
@@ -200,12 +193,13 @@ tc filter add dev tap parent ffff: protocol all prio 49 basic\
 
 ???
 
-* BW limit rule configured and applied before by ovs agent can now be applied by
-  linuxbrige agent which will do it by executing on host 2 TC commands (on slide)
-* LinuxBridge agent is „talking” directly to TC because LB don’t have any
-  mechanism similar to rate_limit which is in OVS.
+So bw limit configured in Neutron with command ... will be applied by LB agent
+by executing ...
+
+To say:
 * In fact it makes exactly same TC command as Openvswitch is doing so at the end
   limits are applied in exactly same way for both L2 agents.
+
 * MTU value here is the maximum packet size handled by the policer. Larger ones
   will be handled like they exceeded the configured rate, so will be dropped in
   our case.
@@ -233,6 +227,14 @@ rule from QoS \o/
 
 * L2 extension drivers in LinuxBridge agent
 * Fullstack tests for LinuxBridge agent
+
+???
+
+During the work on QoS for LB agent we achieved 2 other things...
+
+To say:
+* L2 extension drivers - tell that it's new in Liberty and QoS is implemented that way...
+* support for LB in fullstack tests
 
 ---
 
