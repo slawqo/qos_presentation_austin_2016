@@ -16,9 +16,13 @@ h1, h2, h3 {
     bottom: 20px;
 }
 
+.remark-notes {
+    font-size: 24px;
+}
+
 .remark-notes ul li, .remark-notes ol li {
     text-align: left;
-    font-size: 16px;
+    font-size: 24px;
     margin-top: auto;
 }
 
