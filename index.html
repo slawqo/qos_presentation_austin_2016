@@ -266,7 +266,37 @@ and sharing policies too.
 
 ---
 
-# DSCP placeholder
+class: center
+
+# DSCP Marking Rule:
+
+1. Create policy
+```bash
+neutron qos-policy-create dscp-marking
+```
+2. Create DSCP marking rule:
+```bash
+neutron qos-dscp-marking-rule-create dscp-marking --dscp-mark 26
+```
+3. Assign policy to a port
+```bash
+openstack network port-update \
+     48c6256f-9123-4e39-a321-108782807cfc --qos-policy dscp-marking
+```
+
+---
+
+class: center
+# DSCP Diagram
+
+![dscp workflow](images/dscp_workflow.png)
+
+---
+
+class: center
+# DSCP Policy to rules
+
+![policy to rules](images/policy_to_rules.png)
 
 ---
 
