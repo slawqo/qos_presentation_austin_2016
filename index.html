@@ -239,22 +239,24 @@ To say:
 ---
 
 name: rbac_in_mitaka
-# Role Based Access Control (RBAC)
+# QoS in Mitaka: Role Based Access Control (RBAC)
 
 In the Liberty release, policies could be shared
 to all projects (tenants).
 
 ```bash
-neutron qos-policy-create shared-policy --shared
+$ neutron qos-policy-create shared-policy --shared
 ```
 In *Mitaka*, thanks to RBAC integration, QoS policies
 can be shared to specific projects.
 
 
 ```bash
-neutron qos-policy-create the-policy
-neutron rbac-create --target-tenant <project-uuid> --action access_as_shared \
-                    --type qos-policy <policy-uuid>
+
+$ neutron qos-policy-create the-policy
+$ neutron rbac-create --target-tenant <project-uuid> --action access_as_shared \
+                      --type qos-policy <policy-uuid>
+_
 ```
 
 
@@ -263,10 +265,6 @@ neutron rbac-create --target-tenant <project-uuid> --action access_as_shared \
 Talk about how policy.json works, and how operators
 can modify that to allow non-administrator creating
 and sharing policies too.
-
----
-
-# DSCP placeholder
 
 ---
 
@@ -282,6 +280,33 @@ Explain what an RFE is: use case proposal, high level.
 
 ---
 
+# DSCP
+
+---
+
+# Ingress bandwidth limiting
+
+* data consuming apps: crawlers, dataminers, etc.
+* planning and allocation of bandwidth in general.
+
+```bash
+neutron qos-bandwidth-limit-rule-create --max-kbps 512 \
+                                        --max-burst-kbps 1024 \
+                                        --direction ingress \
+                                        example-policy
+```
+
+* adds direction field to the bandwidth limit rule.
+    * ingress
+    * egress (default)
+
+???
+Note: SR-IOV does not suport ingress bw limit afaik,
+we may need to filter requests on ingress direction (or prevent
+it for vnic types other than vifs)
+
+---
+
 # Newton and beyond (RFEs on flight)
 
 RFEs: http://bit.ly/neutron-qos-rfes
@@ -293,10 +318,12 @@ RFEs: http://bit.ly/neutron-qos-rfes
 * Traffic classification
 * Rate limit external connectivity traffic
 * VLAN 802.1p support (L2 Marking)
+* Default policy for tenant
 * ECN integration
 
 ---
-# Newton rfe: Minimum bandwidth (egress)
+# Newton RFE: Minimum bandwidth (egress)
+https://bugs.launchpad.net/neutron/+bug/1560963
 
   <div id="graph-min-bw-best-eff"></div>
 
@@ -304,7 +331,7 @@ RFEs: http://bit.ly/neutron-qos-rfes
 
 name: bandwidth-scheduling-1
 
-# Newton rfe: Minimum bandwidth (egress)
+# Newton rfe: Minimum bandwidth (egress) (II)
   Strict bandwidth guarantee: scheduling aware
 
 ![Bandwidth Guarantees 1](images/band-guarantees-sched-1.svg)
@@ -313,7 +340,7 @@ name: bandwidth-scheduling-1
 
 name: bandwidth-scheduling-2
 
-# Newton rfe: Minimum bandwidth (egress)
+# Newton rfe: Minimum bandwidth (egress) (III)
   Strict bandwidth guarantee: scheduling aware
 
 ![Bandwidth Guarantees 2](images/band-guarantees-sched-2.svg)
@@ -322,7 +349,7 @@ name: bandwidth-scheduling-2
 
 name: bandwidth-scheduling-3
 
-# Newton rfe: Minimum bandwidth (egress)
+# Newton rfe: Minimum bandwidth (egress) (IV)
   Strict bandwidth guarantee: scheduling aware
 
 ![Bandwidth Guarantees 3](images/band-guarantees-sched-3.svg)
@@ -331,7 +358,7 @@ name: bandwidth-scheduling-3
 
 name: bandwidth-scheduling-3b
 
-# Newton rfe: Minimum bandwidth (egress)
+# Newton rfe: Minimum bandwidth (egress) (V)
   Strict bandwidth guarantee: scheduling aware
 
 ![Bandwidth Guarantees 3b](images/band-guarantees-sched-3b.svg)
@@ -340,7 +367,7 @@ name: bandwidth-scheduling-3b
 
 name: bandwidth-scheduling-4
 
-# Newton rfe: Minimum bandwidth (egress)
+# Newton rfe: Minimum bandwidth (egress) (VI)
   Strict bandwidth guarantee: scheduling aware
 
 ![Bandwidth Guarantees 4](images/band-guarantees-sched-4.svg)
@@ -349,7 +376,7 @@ name: bandwidth-scheduling-4
 
 name: bandwidth-scheduling-5
 
-# Newton rfe: Minimum bandwidth (egress)
+# Newton rfe: Minimum bandwidth (egress) (VII)
   Strict bandwidth guarantee: scheduling aware
 
 ![Bandwidth Guarantees 5](images/band-guarantees-sched-5.svg)
@@ -358,7 +385,7 @@ name: bandwidth-scheduling-5
 
 name: bandwidth-scheduling-6
 
-# Newton rfe: Minimum bandwidth (egress)
+# Newton rfe: Minimum bandwidth (egress) (VIII)
   Strict bandwidth guarantee: scheduling aware
 
 ![Bandwidth Guarantees 6](images/band-guarantees-sched-6.svg)
@@ -367,10 +394,68 @@ name: bandwidth-scheduling-6
 
 name: bandwidth-scheduling
 
-# Newton rfe: Minimum bandwidth (egress)
+# Newton rfe: Minimum bandwidth (egress) (IX)
    Strict bandwidth guarantee: integration with nova generic resource pools.
+   * Bandwidth is modeled as a resource (NIC_BW)
+   * Reported to nova generic resource pool API (when available)
+---
+
+# Newton rfe: Traffic classification
+
+* Apply rules to specific traffic flows
+* Use cases: Prioritize certain traffic, like control, realtime data, etc.
+
+### MODEL
+```
+ +-----------+     +---------+    +-------------------+
+ | QosPolicy |--+--| QosRule |----| TrafficClassifier | (SSH)
+ +-----------+  |  +---------+    +-------------------+
+                |
+                |  +---------+    +-------------------+
+                +--| QosRule |----| TrafficClassifier | (HTTP)
+                |  +---------+    +-------------------+
+                |
+                |  +---------+
+                \--| QosRule | (all the other traffic)
+                   +---------+
+
+```
 
 ---
+
+# Default policy for tenant
+
+Raw proposal:
+
+```bash
+
+$ neutron qos-policy-create the-policy
+$ neutron rbac-create --target-tenant <project-uuid> --action default \
+                      --type qos-policy <policy-uuid>
+
+$
+```
+
+When the tenant creates a resource (port), it gets attache to this
+policy by default.
+
+---
+# VLAN 802.1p Support
+
+* L2 level (in contrast with L3 of DSCP)
+* For vlan provider networks
+* Could be leveraged to prioritize tenant traffic segmented on vlan.
+
+https://bugs.launchpad.net/neutron/+bug/1505631
+
+---
+# Rate limit external conectivity
+
+---
+# Leveraging ECN
+
+---
+
 # Questions?
 
 .presenters[
