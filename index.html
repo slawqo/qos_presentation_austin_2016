@@ -36,13 +36,9 @@ class: center
 .left[
 In the Liberty design summit, a model to provide
 quality of service in a gerneric way was proposed.
-
- * image goes here
-
-The foundation was implemented during the QoS
-coding sprint.
 ]
 
+![introduction](images/introduction.svg)
 ---
 name: qos_in_liberty
 class: center
@@ -327,7 +323,7 @@ name: dscp_policy
 ![policy to rules](images/policy_to_rules.png)
 ---
 
-# Ingress bandwidth limiting
+# Newton: Ingress bandwidth limiting
 
 * data consuming apps: crawlers, dataminers, etc.
 * planning and allocation of bandwidth in general.
@@ -494,8 +490,15 @@ https://bugs.launchpad.net/neutron/+bug/1505631
 ---
 # Rate limit external conectivity
 
+* Limit traffic speed at the border
+* It's problematic with distributed routing.
+
+
 ---
 # Leveraging ECN
+
+* Still needs more definition.
+* Better behaviour at the limit (instead of policing/dropping)
 
 ---
 
