@@ -90,7 +90,7 @@ Short remind. How QoS works in Neutron. If You want to configure bw...
 name: qos_bw_limit_ovs
 class: center
 
-# Apply egress bandwidth limit rule in Openvswitch agent
+# Apply egress bandwidth limit rule in Open vSwitch agent
 
 ```bash
 ovs-vsctl set Interface tap1 ingress_policing_rate=512
@@ -193,7 +193,7 @@ So bw limit configured in Neutron with command ... will be applied by LB agent
 by executing ...
 
 To say:
-* In fact it makes exactly same TC command as Openvswitch is doing so at the end
+* In fact it makes exactly same TC command as Open vSwitch is doing so at the end
   limits are applied in exactly same way for both L2 agents.
 
 * MTU value here is the maximum packet size handled by the policer. Larger ones
@@ -208,7 +208,7 @@ class: center
 
 ## Egress bandwidth limit for:
 
-* Openvswitch L2 agent
+* Open vSwitch L2 agent
 * SR-IOV L2 agent
 * __LinuxBridge L2 agent__
 
